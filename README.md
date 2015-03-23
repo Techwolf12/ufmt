@@ -1,2 +1,2 @@
 # Ultimate-Formatter
-Format all the code files!
+One simple tool to format a whole directory with code from the command line.
