@@ -24,16 +24,21 @@ struct SLanguageDefinition
   CString m_strName;
 
   /**
-   * Identifier for the language (eg. what to put at the "-l=language" argument)
+   * Identifier for the language. (eg. what to put at the "--lang=language" argument)
    */
   CString m_strID;
+
+  /**
+   * File extension for the language for automatic detection.
+   */
+  CString m_strExtension;
 };
 
 /**
  * Array of the available language definitions.
  */
 static SLanguageDefinition g_aLanguageDefinitions[] = {
-  { "HTML", "html" },
+  { "HTML", "html", "html" },
 };
 
 UFMT_NS_END;
