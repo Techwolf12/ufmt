@@ -74,11 +74,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Formatter.cpp" />
+    <ClCompile Include="Formatters\Html.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="UFMT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Formatter.h" />
+    <ClInclude Include="Formatters\Html.h" />
     <ClInclude Include="LanguageDefinition.h" />
     <ClInclude Include="StdH.h" />
     <ClInclude Include="UFMT.h" />

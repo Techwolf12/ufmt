@@ -25,7 +25,12 @@ public:
   /**
    * When the formatter starts, this will be the "entry point". 
    */
-  virtual void Start(const CString& strFilename);
+  virtual void Start(CFileStream &fs) = 0;
+
+  /**
+   * When the formatter ends, this will be called as a finishing touch for the output.
+   */
+  virtual void End(CFileStream &fs) = 0;
 };
 
 UFMT_NS_END;

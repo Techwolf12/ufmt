@@ -8,6 +8,8 @@
 
 #include "StdH.h"
 
+#include "LanguageDefinition.h"
+
 UFMT_NS_BEGIN;
 
 /**
@@ -21,6 +23,12 @@ public:
    * Toggled with --stdout.
    */
   BOOL m_bStdout;
+
+  /**
+   * Whether to be verbose or not.
+   * Toggled with --verbose.
+   */
+  BOOL m_bVerbose;
 
   /**
    * Explicit language identifier. If empty, ufmt will guess the language based on file extension.
@@ -38,6 +46,18 @@ public:
   virtual ~CUltimateFormatter();
 
   /**
+   * Whether or not the printing is verbose.
+   * This only returns true if --verbose is given.
+   */
+  virtual BOOL IsVerbose();
+
+  /**
+   * Whether or not printing verbose information is adviced.
+   * This always returns true if --verbose is given.
+   */
+  virtual BOOL ShouldPrint();
+
+  /**
    * Handle a command line argument.
    * For "--a=b", the key is "--a" and the value is "b".
    * For "--a", the key is "--a" and the value is an empty string.
@@ -45,9 +65,14 @@ public:
   virtual void HandleArgument(const CString &strKey, const CString &strValue);
 
   /**
+   * Find the language definition from the given ID.
+   */
+  virtual SLanguageDefinition* GetDefinition(const CString &strID);
+
+  /**
    * Start processing a file based on the class fields set.
    */
-  virtual void ProcessFile(const CString &strFilename);
+  virtual void ProcessFile(const CFilename &fnm);
 
   /**
    * Show the basic help usage text.

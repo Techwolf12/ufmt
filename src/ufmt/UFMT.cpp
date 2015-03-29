@@ -10,6 +10,7 @@
 
 #include "UFMT.h"
 #include "LanguageDefinition.h"
+#include "Formatter.h"
 
 UFMT_NS_BEGIN;
 
@@ -21,29 +22,118 @@ CUltimateFormatter::~CUltimateFormatter()
 {
 }
 
+BOOL CUltimateFormatter::IsVerbose()
+{
+  return m_bVerbose;
+}
+
+BOOL CUltimateFormatter::ShouldPrint()
+{
+  return m_bVerbose || !m_bStdout || m_iFileCount > 1;
+}
+
 void CUltimateFormatter::HandleArgument(const CString &strKey, const CString &strValue)
 {
   if(strKey == "--lang") {
+    if(GetDefinition(strValue) == NULL) {
+      printf("ERROR: Language '%s' doesn't exist!\n", (const char*)strValue);
+      return;
+    }
     m_strLanguage = strValue;
+    return;
   }
 
   if(strKey == "--stdout") {
     m_bStdout = TRUE;
+    return;
+  }
+
+  if(strKey == "--verbose") {
+    m_bVerbose = TRUE;
+    return;
   }
 }
 
-void CUltimateFormatter::ProcessFile(const CString &strFilename)
+SLanguageDefinition* CUltimateFormatter::GetDefinition(const CString &strID)
 {
-  if(m_iFileCount > 1) {
-    printf("--- %s\n", strFilename);
+  for(int i=0; i<ARRAY_SIZE(g_aLanguageDefinitions); i++) {
+    SLanguageDefinition &def = g_aLanguageDefinitions[i];
+    if(def.m_strID == strID) {
+      return &def;
+    }
+  }
+  return NULL;
+}
+
+void CUltimateFormatter::ProcessFile(const CFilename &fnm)
+{
+  if(!m_bStdout || m_iFileCount > 1) {
+    printf("--- %s\n", (const char*)fnm);
   }
 
+  // Find out which formatter to use
+  SLanguageDefinition* pLanguage = NULL;
 
+  // If there's no explicit language given, attempt to manually find it by file extension
+  if(m_strLanguage == "") {
+    CString strExtension = fnm.Extension();
+
+    for(int i=0; i<ARRAY_SIZE(g_aLanguageDefinitions); i++) {
+      SLanguageDefinition &def = g_aLanguageDefinitions[i];
+
+      CStackArray<CString> aExtensions;
+      def.m_strExtension.Split(";", aExtensions);
+
+      if(aExtensions.Contains(strExtension)) {
+        // Language has been found!
+        pLanguage = &def;
+        break;
+      }
+    }
+  } else {
+    pLanguage = GetDefinition(m_strLanguage);
+  }
+
+  if(pLanguage == NULL) {
+    printf("ERROR: No language found for %s!\n", (const char*)fnm);
+    return;
+  }
+
+  if(pLanguage->m_pFormatter == NULL) {
+    printf("ERROR: Language %s doesn't have a formatter!\n", (const char*)pLanguage->m_strID);
+    return;
+  }
+
+  CFileStream fsInput;
+  if(!fsInput.Open(fnm, "r")) {
+    printf("ERROR: Couldn't open file %s for input!\n", (const char*)fnm);
+    return;
+  }
+  pLanguage->m_pFormatter->Start(fsInput);
+
+  CFileStream fsOutput;
+  if(m_bStdout) {
+    fsOutput.OpenStdout();
+  } else {
+    if(!fsOutput.Open(fnm, "w")) {
+      printf("ERROR: Couldn't open file %s for output!\n", (const char*)fnm);
+      return;
+    }
+  }
+  pLanguage->m_pFormatter->End(fsOutput);
 }
 
 void CUltimateFormatter::ShowHelp()
 {
-  printf("Ultimate-Formatter\n");
+  printf("Ultimate-Formatter " UFMT_VERSION "\n");
+  printf("  (c) Christiaan de Die <contact@techwolf12.nl>\n");
+  printf("  (c) Angelo Geels <spansjh@gmail.com>\n");
+  printf("\n");
+
+  // Because people forget to back up their shit
+  printf("  \"version control is your own personal backup\" -authors\n");
+  printf("\n");
+
   printf("  Usage examples:\n");
   printf("    ufmt <filename>\n");
   printf("    ufmt <filename> [--lang=language] [--stdout]\n");
@@ -53,7 +143,7 @@ void CUltimateFormatter::ShowHelp()
 
   for(int i=0; i<ARRAY_SIZE(g_aLanguageDefinitions); i++) {
     SLanguageDefinition &def = g_aLanguageDefinitions[i];
-    printf("    * %s: -l=%s (*.%s)\n", def.m_strName, def.m_strID, def.m_strExtension);
+    printf("    * %s: -l=%s (*.%s)\n", (const char*)def.m_strName, (const char*)def.m_strID, (const char*)def.m_strExtension);
   }
 
   printf("\n");
@@ -62,7 +152,7 @@ void CUltimateFormatter::ShowHelp()
 void CUltimateFormatter::Main(int argc, char* argv[])
 {
   if(argc > 1) {
-    CStackArray<CString> aFiles;
+    CStackArray<CFilename> aFiles;
 
     for(int i=1; i<argc; i++) {
       CString strArg = argv[i];

@@ -9,6 +9,9 @@
 #ifndef UFMT_STDH_H_INCLUDED
 #define UFMT_STDH_H_INCLUDED
 
+// Versioning
+#define UFMT_VERSION "v0.0.1"
+
 // Namespacing
 #define UFMT_NS_BEGIN namespace UFMT {
 #define UFMT_NS_END }
