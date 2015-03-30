@@ -34,9 +34,27 @@
           <h3>
 <a id="ultimate-formatter" class="anchor" href="#ultimate-formatter" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ultimate-formatter</h3>
 
-<p>How to use:  </p>
+<p>How to build:  </p>
 
 <pre><code>$ git clone https://github.com/Techwolf12/Ultimate-formatter.git
+$ cd Ultimate-Formatter
+$ mkdir build; cd build
+$ cmake ..
+$ make; make install
+</code></pre>
+
+<p>How to use:</p>
+
+<pre><code>$ cat foo.html
+&lt;div&gt;&lt;div&gt;
+Foo
+&lt;/div&gt;&lt;/div&gt;
+$ ufmt foo.html --stdout
+&lt;div&gt;
+  &lt;div&gt;
+    Foo
+  &lt;/div&gt;
+&lt;/div&gt;
 </code></pre>
 
 <h3>
