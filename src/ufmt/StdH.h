@@ -21,7 +21,7 @@
 #include <string.h>
 
 // Scratch core library
-#include <Scratch.h>
+#include <Scratch/Scratch.h>
 using namespace Scratch;
 
 // Useful macros not shipped with libScratch (yet)
