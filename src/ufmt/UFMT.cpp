@@ -137,7 +137,7 @@ void CUltimateFormatter::ShowHelp()
 
   printf("  Usage examples:\n");
   printf("    ufmt <filename>\n");
-  printf("    ufmt <filename> [--lang=language] [--stdout]\n");
+  printf("    ufmt <filename> [--recursive] [--lang=language] [--stdout]\n");
 
   printf("\n");
   printf("  Available languages are:\n");
