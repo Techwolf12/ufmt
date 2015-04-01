@@ -144,7 +144,20 @@ void CUltimateFormatter::ShowHelp()
 
   for(int i=0; i<ARRAY_SIZE(g_aLanguageDefinitions); i++) {
     SLanguageDefinition &def = g_aLanguageDefinitions[i];
-    printf("    * %s: -l=%s (*.%s)\n", (const char*)def.m_strName, (const char*)def.m_strID, (const char*)def.m_strExtension);
+
+    CStackArray<CString> aExtensions;
+    def.m_strExtension.Split(";", aExtensions);
+
+    CString strFormats;
+    for(int j=0; j<aExtensions.Count(); j++) {
+      if(j == 0) {
+        strFormats = "*." + aExtensions[j];
+      } else {
+        strFormats += ", *." + aExtensions[j];
+      }
+    }
+
+    printf("    * %s: --lang=%s (%s)\n", (const char*)def.m_strName, (const char*)def.m_strID, (const char*)strFormats);
   }
 
   printf("\n");
