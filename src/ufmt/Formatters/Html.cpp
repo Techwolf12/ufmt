@@ -41,7 +41,7 @@ void CHtmlFormatter::HandleTag(CFileStream &fsOutput)
   bool bInEndTag = false;
 
   while(!fmt_pfsInput->AtEOF()) {
-    c = fmt_pfsInput->ReadChar();
+    char c = fmt_pfsInput->ReadChar();
     if(bInTag) {
       if(bInTagString) {
         if(c == '"') {

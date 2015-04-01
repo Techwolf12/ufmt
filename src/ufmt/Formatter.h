@@ -24,6 +24,16 @@ public:
    */
   CFileStream* fmt_pfsInput;
 
+  /**
+   * Keep count of the current line in the source file.
+   */
+  int fmt_iLine;
+
+  /**
+   * Keep count of the current column in the source file.
+   */
+  int fmt_iColumn;
+
 public:
   CFormatter();
   virtual ~CFormatter();
@@ -39,6 +49,36 @@ public:
    * stream.
    */
   virtual void Process(CFileStream &fsOutput) = 0;
+
+  /**
+   * Get the next char.
+   */
+  virtual char Next();
+
+  /**
+   * Peek the next char.
+   */
+  virtual char PeekNext();
+
+  /**
+   * Get the next string.
+   */
+  virtual CString NextString(int length);
+
+  /**
+   * Peek the next string.
+   */
+  virtual CString PeekNextString(int length);
+
+  /**
+   * Call this when a new line in the source file has been found.
+   */
+  virtual void Addlines(int n = 1);
+
+  /**
+   * Call this to increase the column counter.
+   */
+  virtual void Addcolumns(int n = 1);
 };
 
 UFMT_NS_END;

@@ -13,6 +13,7 @@
 
 #include "Formatter.h"
 #include "Formatters/Html.h"
+#include "Formatters/C.h"
 
 UFMT_NS_BEGIN;
 
@@ -47,6 +48,7 @@ struct SLanguageDefinition
  */
 static SLanguageDefinition g_aLanguageDefinitions[] = {
   { "HTML", "html", "html;htm", new CHtmlFormatter() },
+  { "C", "c", "c;h", new CCFormatter() },
 };
 
 UFMT_NS_END;

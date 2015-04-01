@@ -18,6 +18,9 @@ add_executable(ufmt
 	
 	src/ufmt/Formatters/Html.cpp
 	src/ufmt/Formatters/Html.h
+	
+	src/ufmt/Formatters/C.cpp
+	src/ufmt/Formatters/C.h
 )
 
 add_subdirectory(src/Scratch)
