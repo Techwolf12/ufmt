@@ -40,7 +40,7 @@ void CCFormatter::Process(CFileStream &fsOutput)
     }
 
     if(c == '/') {
-
+      
     }
   }
 }
