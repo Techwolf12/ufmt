@@ -19,18 +19,26 @@ UFMT_NS_BEGIN;
 class CFormatter
 {
 public:
+  /**
+   * The input stream to read from to start processing.
+   */
+  CFileStream* fmt_pfsInput;
+
+public:
   CFormatter();
   virtual ~CFormatter();
 
   /**
-   * When the formatter starts, this will be the "entry point". 
+   * When the formatter starts, this will be the "entry point", a good place to clean
+   * class fields and start from an empty state.
    */
-  virtual void Start(CFileStream &fs) = 0;
+  virtual void Start() = 0;
 
   /**
-   * When the formatter ends, this will be called as a finishing touch for the output.
+   * This is called to actually process the input stream and write to the given output
+   * stream.
    */
-  virtual void End(CFileStream &fs) = 0;
+  virtual void Process(CFileStream &fsOutput) = 0;
 };
 
 UFMT_NS_END;

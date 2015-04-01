@@ -21,8 +21,8 @@ public:
   CHtmlFormatter();
   virtual ~CHtmlFormatter();
 
-  virtual void Start(CFileStream &fs);
-  virtual void End(CFileStream &fs);
+  virtual void Start();
+  virtual void Process(CFileStream &fsOutput);
 };
 
 UFMT_NS_END;

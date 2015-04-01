@@ -104,12 +104,13 @@ void CUltimateFormatter::ProcessFile(const CFilename &fnm)
     return;
   }
 
-  CFileStream fsInput;
-  if(!fsInput.Open(fnm, "r")) {
+  CFileStream* pfsInput = new CFileStream();
+  if(!pfsInput->Open(fnm, "r")) {
     printf("ERROR: Couldn't open file %s for input!\n", (const char*)fnm);
     return;
   }
-  pLanguage->m_pFormatter->Start(fsInput);
+  pLanguage->m_pFormatter->fmt_pfsInput = pfsInput;
+  pLanguage->m_pFormatter->Start();
 
   CFileStream fsOutput;
   if(m_bStdout) {
@@ -120,7 +121,7 @@ void CUltimateFormatter::ProcessFile(const CFilename &fnm)
       return;
     }
   }
-  pLanguage->m_pFormatter->End(fsOutput);
+  pLanguage->m_pFormatter->Process(fsOutput);
 }
 
 void CUltimateFormatter::ShowHelp()

@@ -14,6 +14,7 @@ UFMT_NS_BEGIN;
 
 CFormatter::CFormatter()
 {
+  fmt_pfsInput = NULL;
 }
 
 CFormatter::~CFormatter()

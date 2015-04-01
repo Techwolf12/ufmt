@@ -20,14 +20,13 @@ CHtmlFormatter::~CHtmlFormatter()
 {
 }
 
-void CHtmlFormatter::Start(CFileStream &fs)
+void CHtmlFormatter::Start()
 {
-
 }
 
-void CHtmlFormatter::End(CFileStream &fs)
+void CHtmlFormatter::Process(CFileStream &fsOutput)
 {
-
+  
 }
 
 UFMT_NS_END;
