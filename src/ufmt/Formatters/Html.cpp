@@ -26,7 +26,40 @@ void CHtmlFormatter::Start()
 
 void CHtmlFormatter::Process(CFileStream &fsOutput)
 {
-  
+  while(!fmt_pfsInput->AtEOF()) {
+    char c = fmt_pfsInput->ReadChar();
+    if(c == '<') {
+      HandleTag(fsOutput);
+    }
+  }
+}
+
+void CHtmlFormatter::HandleTag(CFileStream &fsOutput)
+{
+  bool bInTag = true;
+  bool bInTagString = false;
+  bool bInEndTag = false;
+
+  while(!fmt_pfsInput->AtEOF()) {
+    c = fmt_pfsInput->ReadChar();
+    if(bInTag) {
+      if(bInTagString) {
+        if(c == '"') {
+          bInTagString = false;
+        }
+        continue;
+      }
+
+      if(c == '"') {
+        bInTagString = true;
+      }
+      continue;
+    }
+
+    if(c == '<') {
+      bInEndTag = fmt_pfsInput->ReadChar() == '/';
+    }
+  }
 }
 
 UFMT_NS_END;

@@ -23,6 +23,8 @@ public:
 
   virtual void Start();
   virtual void Process(CFileStream &fsOutput);
+
+  virtual void HandleTag(CFileStream &fsOutput);
 };
 
 UFMT_NS_END;
