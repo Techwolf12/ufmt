@@ -26,6 +26,9 @@
     <ClCompile Include="Formatters\Html.cpp">
       <Filter>Source Files\Formatters</Filter>
     </ClCompile>
+    <ClCompile Include="Formatters\C.cpp">
+      <Filter>Source Files\Formatters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Formatters\Html.h">
@@ -42,6 +45,9 @@
     </ClInclude>
     <ClInclude Include="StdH.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Formatters\C.h">
+      <Filter>Source Files\Formatters</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
