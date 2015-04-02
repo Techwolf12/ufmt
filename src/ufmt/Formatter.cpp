@@ -25,25 +25,50 @@ CFormatter::~CFormatter()
 
 char CFormatter::Next()
 {
+  char c;
+  do {
+    c = fmt_pfsInput->ReadChar();
+  } while(c == '\r');
 
+  if(c == '\n') {
+    Addlines();
+  } else {
+    Addcolumns();
+  }
+
+  return c;
 }
 
-virtual char CFormatter::PeekNext()
+char CFormatter::PeekNext()
 {
+  char c;
+  do {
+    c = fmt_pfsInput->ReadChar();
+  } while(c == '\r');
 
+  fmt_pfsInput->Seek(-1, 1/*SEEK_CUR*/);
+
+  return c;
 }
 
-virtual CString CFormatter::NextString(int length)
+CString CFormatter::NextString(int length)
 {
   char* sz = new char[length+1];
   fmt_pfsInput->Read(sz, length);
   sz[length] = '\0';
+  for(int i=0; i<length; i++) {
+    if(sz[i] == '\n') {
+      Addlines();
+    } else {
+      Addcolumns();
+    }
+  }
   CString ret(sz);
   delete[] sz;
   return ret;
 }
 
-virtual CString CFormatter::PeekNextString(int length)
+CString CFormatter::PeekNextString(int length)
 {
   char* sz = new char[length+1];
   fmt_pfsInput->Read(sz, length);
