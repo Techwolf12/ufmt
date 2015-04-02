@@ -10,31 +10,58 @@
 
 #include "Formatter.h"
 
+#include "UFMT.h"
+
 UFMT_NS_BEGIN;
 
 CFormatter::CFormatter()
 {
+  fmt_pProgram = NULL;
   fmt_pfsInput = NULL;
   fmt_iLine = 1;
   fmt_iColumn = 0;
+  fmt_iColumnContent = 0;
+  fmt_bContentHit = FALSE;
 }
 
 CFormatter::~CFormatter()
 {
 }
 
+CString CFormatter::Indent(const CString &strLine, int iIndent)
+{
+  if(iIndent == 0) {
+    return strLine;
+  }
+
+  CString strIndent;
+  if(fmt_pProgram->m_bIndentWithTabs) {
+    strIndent.Fill('\t', iIndent);
+  } else {
+    strIndent.Fill(' ', fmt_pProgram->m_iIndentSpaces * iIndent);
+  }
+  return strIndent + strLine.Trim();
+}
+
+BOOL CFormatter::IsWhitespace(char c)
+{
+  return c == ' ' || c == '\t';
+}
+
 char CFormatter::Next()
 {
   char c;
   do {
-    c = fmt_pfsInput->ReadChar();
-  } while(c == '\r');
+    do {
+      c = fmt_pfsInput->ReadChar();
+    } while(c == '\r');
 
-  if(c == '\n') {
-    Addlines();
-  } else {
-    Addcolumns();
-  }
+    HandleCounters(c);
+
+    if(c == '\n') {
+      break;
+    }
+  } while(!fmt_bContentHit);
 
   return c;
 }
@@ -57,11 +84,7 @@ CString CFormatter::NextString(int length)
   fmt_pfsInput->Read(sz, length);
   sz[length] = '\0';
   for(int i=0; i<length; i++) {
-    if(sz[i] == '\n') {
-      Addlines();
-    } else {
-      Addcolumns();
-    }
+    HandleCounters(sz[i]);
   }
   CString ret(sz);
   delete[] sz;
@@ -85,9 +108,23 @@ void CFormatter::Addlines(int n)
   fmt_iColumn = 0;
 }
 
-void CFormatter::Addcolumns(int n)
+void CFormatter::Addcolumns(int n, int nc)
 {
   fmt_iColumn += n;
+  fmt_iColumnContent += nc;
+}
+
+void CFormatter::HandleCounters(char c)
+{
+  if(c == '\n') {
+    Addlines();
+    fmt_bContentHit = FALSE;
+  } else {
+    if(!fmt_bContentHit && !IsWhitespace(c)) {
+      fmt_bContentHit = TRUE;
+    }
+    Addcolumns(1, fmt_bContentHit);
+  }
 }
 
 UFMT_NS_END;

@@ -15,14 +15,30 @@
 
 UFMT_NS_BEGIN;
 
+struct SCBlock
+{
+  int m_iStartLine;
+
+  SCBlock();
+};
+
 class CCFormatter : public CFormatter
 {
+public:
+  CFileStream* m_pfsOutput;
+
+  CString m_strLine;
+  int m_iIndent;
+  int m_iIndentNext;
+
 public:
   CCFormatter();
   virtual ~CCFormatter();
 
   virtual void Start();
   virtual void Process(CFileStream &fsOutput);
+
+  virtual void FlushLine(BOOL bNewLine = TRUE);
 };
 
 UFMT_NS_END;

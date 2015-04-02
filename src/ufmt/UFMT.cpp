@@ -16,6 +16,14 @@ UFMT_NS_BEGIN;
 
 CUltimateFormatter::CUltimateFormatter()
 {
+  //TODO: Look for ~/.ufmtrc
+
+  m_bStdout = FALSE;
+  m_bVerbose = FALSE;
+  m_iFileCount = 0;
+
+  m_bIndentWithTabs = FALSE;
+  m_iIndentSpaces = 2;
 }
 
 CUltimateFormatter::~CUltimateFormatter()
@@ -109,6 +117,7 @@ void CUltimateFormatter::ProcessFile(const CFilename &fnm)
     printf("ERROR: Couldn't open file %s for input!\n", (const char*)fnm);
     return;
   }
+  pLanguage->m_pFormatter->fmt_pProgram = this;
   pLanguage->m_pFormatter->fmt_pfsInput = pfsInput;
   pLanguage->m_pFormatter->Start();
 

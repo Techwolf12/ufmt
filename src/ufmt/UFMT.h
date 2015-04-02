@@ -41,6 +41,24 @@ public:
    */
   int m_iFileCount;
 
+  /**
+   * When true, indent with tabs, otherwise indent with spaces.
+   * Toggled with --tabs
+   */
+  BOOL m_bIndentWithTabs;
+
+  /**
+   * How many spaces to use for indentating.
+   * Set with --spaces=...
+   */
+  int m_iIndentSpaces;
+
+  /**
+   * Whether there should be an empty last line at all times or not.
+   * Toggled with --emptylastline
+   */
+  BOOL m_bEmptyLastLine;
+
 public:
   CUltimateFormatter();
   virtual ~CUltimateFormatter();

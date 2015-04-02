@@ -13,12 +13,19 @@
 
 UFMT_NS_BEGIN;
 
+class CUltimateFormatter;
+
 /**
  * Base formatter class. Inherit from this class to define a new language formatter.
  */
 class CFormatter
 {
 public:
+  /**
+   * The main UFMT class object, can be used to access given parameters to the program.
+   */
+  CUltimateFormatter* fmt_pProgram;
+
   /**
    * The input stream to read from to start processing.
    */
@@ -33,6 +40,16 @@ public:
    * Keep count of the current column in the source file.
    */
   int fmt_iColumn;
+
+  /**
+   * Keep count of the current column in the source file, without any indentation.
+   */
+  int fmt_iColumnContent;
+
+  /**
+   * Whether we have hit the content on the current source line or not.
+   */
+  BOOL fmt_bContentHit;
 
 public:
   CFormatter();
@@ -49,6 +66,16 @@ public:
    * stream.
    */
   virtual void Process(CFileStream &fsOutput) = 0;
+
+  /**
+   * Indent the given line with the given amount of indentation.
+   */
+  virtual CString Indent(const CString &strLine, int iIndent);
+
+  /**
+   * Returns whether the given character is whitespace or not.
+   */
+  virtual BOOL IsWhitespace(char c);
 
   /**
    * Get the next char.
@@ -78,7 +105,13 @@ public:
   /**
    * Call this to increase the column counter.
    */
-  virtual void Addcolumns(int n = 1);
+  virtual void Addcolumns(int n = 1, int nc = 1);
+
+private:
+  /**
+   * Handle line and column counters for the next character. This is called internally.
+   */
+  virtual void HandleCounters(char c);
 };
 
 UFMT_NS_END;
