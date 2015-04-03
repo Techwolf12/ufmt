@@ -10,7 +10,7 @@
 #define UFMT_STDH_H_INCLUDED
 
 // Versioning
-#define UFMT_VERSION "v0.0.1"
+#define UFMT_VERSION "v0.0.1d"
 
 // Namespacing
 #define UFMT_NS_BEGIN namespace UFMT {
