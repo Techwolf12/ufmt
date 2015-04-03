@@ -140,8 +140,7 @@ void CUltimateFormatter::ShowHelp()
   printf("  (c) Angelo Geels <spansjh@gmail.com>\n");
   printf("\n");
 
-  // Because people forget to back up their shit
-  printf("  \"version control is your own personal backup\" -authors\n");
+  printf("  \"Make backups.\" -authors\n");
   printf("\n");
 
   printf("  Usage examples:\n");
