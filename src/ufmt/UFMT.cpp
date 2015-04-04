@@ -24,6 +24,7 @@ CUltimateFormatter::CUltimateFormatter()
 
   m_bIndentWithTabs = FALSE;
   m_iIndentSpaces = 2;
+  m_bEmptyLastLine = FALSE;
 }
 
 CUltimateFormatter::~CUltimateFormatter()
@@ -59,6 +60,20 @@ void CUltimateFormatter::HandleArgument(const CString &strKey, const CString &st
   if(strKey == "--verbose") {
     m_bVerbose = TRUE;
     return;
+  }
+
+  if(strKey == "--tabs") {
+    m_bIndentWithTabs = TRUE;
+    return;
+  }
+
+  if(strKey == "--spaces") {
+    m_iIndentSpaces = atoi(strValue);
+    return;
+  }
+
+  if(strKey == "--emptylastline") {
+    m_bEmptyLastLine = TRUE;
   }
 }
 
